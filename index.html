@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>শিক্ষক দিবস শুভ হোক! - Poem Shuffler</title>
+    <!-- Load Tailwind CSS for beautiful, responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for a scholarly, respectful look */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Baloo+Da+2:wght@400;600;700&display=swap');
+        
+        body {
+            /* Using Baloo Da 2 for a friendly, modern Bengali font */
+            font-family: 'Baloo Da 2', 'Inter', sans-serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); /* Light Blue/Scholarship Theme */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            margin: 0;
+            overflow: hidden; 
+            position: relative;
+        }
+        
+        /* Define fade animation for poems */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+        .fade-in {
+            opacity: 1;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        /* --- CSS for the Slow Movement (Drift) --- */
+        @keyframes slow-drift {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            50% { transform: translate(10px, -5px) rotate(0.2deg); }
+            100% { transform: translate(0px, 0px) rotate(0deg); }
+        }
+
+        #poem-box {
+            /* Apply the very slow, infinite, and alternating drift animation */
+            animation: slow-drift 30s infinite alternate ease-in-out;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <div id="poem-box" class="w-full max-w-4xl p-8 md:p-12 lg:p-16 bg-white shadow-2xl rounded-3xl border-4 border-yellow-500 transform transition duration-500 hover:scale-[1.01] text-center">
+        
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-indigo-700 mb-6 tracking-tight">
+            শিক্ষক দিবস শুভ হোক!
+        </h1>
+        <p class="text-xl text-gray-700 mb-10 font-semibold">
+            গুরুজনদের প্রতি বিনম্র শ্রদ্ধা ও ভালোবাসা
+        </p>
+
+        <!-- Poem Display Area -->
+        <blockquote id="poem-text" class="text-2xl sm:text-3xl font-medium text-gray-800 italic leading-relaxed mb-6 h-48 flex items-center justify-center">
+            <!-- Initial content will be overwritten by JS -->
+            "জ্ঞানের আলো জ্বেলে তুমি, পথ দেখিয়েছ মোরে।"
+        </blockquote>
+        
+        <!-- Source Display Area -->
+        <footer class="text-center">
+            <cite id="poem-source" class="text-lg font-bold text-yellow-600 not-italic block mt-4">
+                — রবীন্দ্রনাথ ঠাকুর (অনুসরণ)
+            </cite>
+        </footer>
+
+    </div>
+
+    <!-- Page Footer with Copyright Notice -->
+    <footer class="absolute bottom-4 left-0 right-0 text-center text-sm text-gray-600 opacity-75">
+        &copy; 2025 AYUSH NANDI শিক্ষক দিবস নিবেদন
+    </footer>
+
+    <script>
+        // --- THE BENGALI POEM ARRAY ---
+        // This array holds the poems/stanzas and their sources. Add your 1000+ entries here!
+        const poems = [
+            {
+                poem: "জ্ঞানের আলো জ্বেলে তুমি, পথ দেখিয়েছ মোরে।",
+                source: "রবীন্দ্রনাথ ঠাকুর (অনুসরণ)"
+            },
+            {
+                poem: "তোমার হাতেই জন্ম নেয় দেশের ভবিষ্যৎ, তাই তো তুমি মহান শিক্ষক।",
+                source: "প্রচলিত বাণী"
+            },
+            {
+                poem: "শিক্ষক, তুমি আলোর দিশারী, আঁধারে দাও পথ।",
+                source: "অজ্ঞাত"
+            },
+            {
+                poem: "তুমি সে বন্ধু, যে ভুল শুধরে দিয়ে আবার পথ দেখায়।",
+                source: "সুভাষ মুখোপাধ্যায় (ভাবানুবাদ)"
+            },
+            {
+                poem: "যে পথে হেঁটেছি আমি, তাতে তোমারই পায়ের ছাপ।",
+                source: "জীবনানন্দ দাশ (অনুপ্রেরণা)"
+            },
+            {
+                poem: "মানুষ গড়ার কারিগর তুমি, তোমার ঋণ শোধ হবে না কোনোদিন।",
+                source: "কৃতজ্ঞ ছাত্র"
+            },
+            {
+                poem: "তোমার প্রতিটি কথা যেন অমৃত, জীবন চলার পাথেয়।",
+                source: "সুকান্ত ভট্টাচার্য (অনুসরণ)"
+            },
+            {
+                poem: "আলোকময় এই পৃথিবীর সবথেকে বড়ো দান, তুমিই সে শিক্ষক, তুমিই সে সম্মান।",
+                source: "অজ্ঞাত কবি"
+            },
+            {
+                poem: "সকল বাঁধন ছিন্ন করে শিখালে মুক্তির গান, তোমায় জানাই সশ্রদ্ধ প্রণাম।",
+                source: "কাজী নজরুল ইসলাম (ভাবধারা)"
+            },
+            {
+                poem: "প্রতিটি সকাল তোমার নামে, প্রতিটি দিন তোমার কাজে।",
+                source: "প্রচলিত"
+            }
+            // Add hundreds more Bengali poems/stanzas here to reach 1000+!
+        ];
+
+        // --- JAVASCRIPT LOGIC ---
+
+        const poemTextElement = document.getElementById('poem-text');
+        const poemSourceElement = document.getElementById('poem-source');
+        let currentPoemIndex = -1;
+
+        /**
+         * Selects a random poem that is different from the current one.
+         * @returns {object} A poem object {poem, source}.
+         */
+        function getRandomPoem() {
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * poems.length);
+            } while (newIndex === currentPoemIndex);
+            
+            currentPoemIndex = newIndex;
+            return poems[newIndex];
+        }
+
+        /**
+         * Displays the new poem with a smooth fade effect.
+         */
+        function displayNewPoem() {
+            // 1. Start fade-out by adding the class
+            poemTextElement.classList.add('fade-out');
+            poemSourceElement.classList.add('fade-out');
+
+            // Wait for the fade-out to complete (1500ms from CSS transition)
+            setTimeout(() => {
+                const newPoem = getRandomPoem();
+
+                // 2. Update the content while hidden
+                poemTextElement.textContent = `"${newPoem.poem}"`;
+                poemSourceElement.textContent = `— ${newPoem.source}`;
+
+                // 3. Remove fade-out and add fade-in to reveal
+                poemTextElement.classList.remove('fade-out');
+                poemSourceElement.classList.remove('fade-out');
+                
+                // Ensure fade-in state is active 
+                poemTextElement.classList.add('fade-in');
+                poemSourceElement.classList.add('fade-in');
+
+                // Clean up the temporary class after the transition
+                setTimeout(() => {
+                     poemTextElement.classList.remove('fade-in');
+                     poemSourceElement.classList.remove('fade-in');
+                }, 1500);
+
+
+            }, 1500); // Wait 1.5 seconds for fade-out
+        }
+
+        // Set the initial poem on load
+        window.onload = function() {
+            displayNewPoem(); // Display the first poem
+            
+            // Set the interval to shuffle poems every 10 seconds (10000 milliseconds)
+            setInterval(displayNewPoem, 10000); 
+        };
+
+    </script>
+
+</body>
+</html>
